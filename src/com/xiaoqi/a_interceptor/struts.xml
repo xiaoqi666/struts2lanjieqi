@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.5//EN"
+        "http://struts.apache.org/dtds/struts-2.5.dtd">
+
+<struts>
+    <package name="a_interceptor" namespace="/" extends="struts-default">
+        <interceptors>
+            <!-- 注册拦截器 -->
+            <interceptor name="MyInter3" class="com.xiaoqi.a_interceptor.MyInterceptor3">
+
+            </interceptor>
+            <!-- 注册拦截器栈 -->
+            <interceptor-stack name="myStack">
+                <!-- 自定义拦截器引入(建议放在20个拦截器之前) -->
+                <interceptor-ref name="MyInter3">
+                    <!--  指定哪些方法不拦截 拦截与不拦截不能同时指定 -->
+                    <param name="excludeMethods">add,delete</param>
+                    <!--  指定哪些方法拦截  -->
+                    <!--<param name="includeMethods">update,query</param>-->
+                </interceptor-ref>
+                <!-- 引用20个默认拦截器 -->
+                <interceptor-ref name="defaultStack"></interceptor-ref>
+            </interceptor-stack>
+        </interceptors>
+        <!-- 指定默认的拦截器栈  全部action都会走这个拦截器 -->
+        <default-interceptor-ref name="myStack"></default-interceptor-ref>
+        <global-allowed-methods>regex:.*</global-allowed-methods>
+        <action name="Demo1Action_*" class="com.xiaoqi.a_interceptor.Demo1Action" method="{1}">
+            <!-- 放在此处,只有Demo1Action会走这个拦截器 -->
+            <!--<interceptor-ref name="myStack"></interceptor-ref>-->
+            <result name="success" type="dispatcher">/index.jsp</result>
+        </action>
+    </package>
+
+</struts>
